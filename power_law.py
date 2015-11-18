@@ -13,7 +13,7 @@ file1.close()
 
 #Let's try it on the "Cutwail" bot first, then generalize it
 def power_law(name):
-	file1 = open('C:\\Users\\USER\\Documents\\Bitsight\\BitSightData\\botnets\\' + name +".txt")
+	file1 = open( name +".txt")
 	No_attack = [[0] * 401 for _ in range(5917)]
 	#53045
 	day = 0

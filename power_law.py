@@ -33,8 +33,9 @@ def power_law(name):
 		x[active_days[i]] += 1
 	y = x / 5917
 	y = -1 * log(y)
-	for i in range(0,401):
-		x[i] = log(i)
+	#for i in range(0,401):
+	#	x[i] = log(i)
+	x = log(x)
 	plt.plot(x[1:],y[1:],'ro')
 	plt.title("Botnet: " + name)
 	plt.ylabel('Neg log probability of infection')

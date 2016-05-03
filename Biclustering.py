@@ -127,6 +127,87 @@ def size_to_col(argument):
     }
     return switcher.get(argument, "yellow")
 
+#Set numbers to each category
+def sec_to_num(argument):
+    switcher = {
+		'Aerospace/Defense': 0,
+		'Business Services': 1,
+		'Consumer Goods': 2,
+		'Education': 3,
+		'Energy/Resources': 4,
+		'Engineering': 5,
+		'Finance': 6,
+		'Food Production': 7,
+		'Government/Politics': 8,
+		'Healthcare/Wellness': 9,
+		'Insurance': 10,
+		'Legal': 11,
+		'Manufacturing': 12,
+		'Media/Entertainment': 13,
+		'Nonprofit/NGO': 14,
+		'Real Estate': 15,
+		'Retail': 16,
+		'Technology': 17,
+		'Telecommunications': 18,
+		'Tourism/Hospitality': 19,
+		'Transportation': 20,
+		'Unknown': 21,
+		'Utilities': 22,
+    }
+    return switcher.get(argument, 23)
+#Set numbers to each size
+def size_to_num(argument):
+    switcher = {
+		'0-100': 0,
+		'100-1000': 1,
+		'1000-10000': 2,
+		'10000-50000': 3,
+		'50000+': 4,
+		'Unknown': 5,
+    }
+    return switcher.get(argument, 6)
+
+#Set category to each number
+def num_to_sec(argument):
+    switcher = {
+		0:'Aerospace/Defense',
+		1:'Business Services',
+		2:'Consumer Goods',
+		3:'Education',
+		4:'Energy/Resources',
+		5:'Engineering',
+		6:'Finance',
+		7:'Food Production',
+		8:'Government/Politics',
+		9:'Healthcare/Wellness',
+		10:'Insurance',
+		11:'Legal',
+		12:'Manufacturing',
+		13:'Media/Entertainment',
+		14:'Nonprofit/NGO',
+		15:'Real Estate',
+		16:'Retail',
+		17:'Technology',
+		18:'Telecommunications',
+		19:'Tourism/Hospitality',
+		20:'Transportation',
+		21:'Unknown',
+		22:'Utilities',
+    }
+    return switcher.get(argument,23)
+#Set numbers to each size
+def size_to_num(argument):
+    switcher = {
+		'0-100',
+		'100-1000',
+		'1000-10000',
+		'10000-50000',
+		'50000+',
+		'Unknown',
+    }
+    return switcher.get(argument, 6)
+    
+
 # Assigns the topics to the documents in corpus
 
 col = []

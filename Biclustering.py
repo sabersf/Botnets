@@ -202,3 +202,23 @@ plt.axis([0, 5124, 0, 17])
 plt.colorbar()
 plt.show()
     
+#Creating the Jaccard similarity coefficient matrix and use it
+# as the distance matrix for clustering
+Distance = np.zeros(shape=(207,207))
+for i in range(207):
+    for j in range(207):
+        if i == j:
+            Distance[i][j] = 0
+        else:
+            intersection = 0
+            union = 0
+            for k in range(5917):
+                #check if the attacked the same entity
+                if count[i][k] > 0 and count[j][k] > 0:
+                    intersection += 1
+                if count[i][k] > 0 or count[j][k] > 0:
+                    union += 1
+            if union == 0:
+                Distance[i][j] = 10000000
+            else:
+                Distance[i][j] = 1 - ((intersection + 0.0) / (union + 0.0))

@@ -148,7 +148,7 @@ for v in new_model.vocab:
 	col_size.append(size_to_col(count_range[v]))
 
 # Check for each botnet how many times it attacked unique entities
-# and 
+# and the intensity of the attacks
 attack_num = [0 for i in range(207)]
 for i in range(207):
     c = np.where(count[i] > 0)
@@ -156,3 +156,23 @@ for i in range(207):
 intensity = [0 for i in range(207)]
 for i in range(207):
     intensity[i] = sum(count[i])
+
+#Making the bot-bot and ent-ent matrix by
+# multiplying bot-ent matrix on its transpose matrix
+count_t = count.transpose()
+bot_mat = np.dot(count,count.T)
+ent_mat = np.dot(count.T, count)
+
+#Heatmap of bot-bot matrix
+plt.pcolor(bot_mat)
+plt.title('Entities heatmap')
+plt.axis([0, 5917, 0, 5917])
+plt.colorbar()
+plt.show()
+
+#Plotting the attack histogram
+plt.hist(attack_num)
+plt.title("Number of attacks histogram")
+#plt.xlabel("Botnet #")
+#plt.ylabel("The number of entities it attacks")
+plt.show()

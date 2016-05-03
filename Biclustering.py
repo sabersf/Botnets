@@ -20,6 +20,8 @@ from mpl_toolkits.mplot3d import Axes3D
 from collections import Counter
 from math import *
 import networkx as nx
+from scipy.spatial.distance import *
+from scipy.cluster.hierarchy import *
 
 from sklearn.datasets import make_checkerboard
 from sklearn.datasets import samples_generator as sg
@@ -237,4 +239,7 @@ for i in range(207):
 G = nx.from_numpy_matrix(Distance)
 nx.draw(G)
 
-#
+# Clustering the botnets using the distance matrix
+hc = linkage(Distance, method='average')
+res = fcluster(hc, 2.5,'distance')
+print max(res)

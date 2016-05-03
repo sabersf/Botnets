@@ -19,6 +19,7 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 from collections import Counter
 from math import *
+import networkx as nx
 
 from sklearn.datasets import make_checkerboard
 from sklearn.datasets import samples_generator as sg
@@ -177,6 +178,14 @@ plt.title("Number of attacks histogram")
 #plt.xlabel("Botnet #")
 #plt.ylabel("The number of entities it attacks")
 plt.show()
+#Plotting the attack histogram
+# for botnets that attacks less than 1k unique entities
+at = [x for x in attack_num if x < 1000]
+plt.hist(at)
+plt.title("Number of attacks histogram")
+#plt.xlabel("Botnet #")
+#plt.ylabel("The number of entities it attacks")
+plt.show()
 
 #Calculating the mean number of attacks and entities
 # in the new matrix
@@ -222,3 +231,10 @@ for i in range(207):
                 Distance[i][j] = 10000000
             else:
                 Distance[i][j] = 1 - ((intersection + 0.0) / (union + 0.0))
+
+
+#Draw the distance matrix
+G = nx.from_numpy_matrix(Distance)
+nx.draw(G)
+
+#

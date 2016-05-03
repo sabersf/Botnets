@@ -253,4 +253,21 @@ for j in range(1,max(res)+1):
     for i in range(206):
         if res[i] == j:
             print botnet_set[i]
-
+#A function to show the labels on the histogram
+def llf(id):
+    if id <206:
+        return botnet_set[id]
+    else:
+        return ""
+# Plotting the Dendrogram histogram
+plt.figure(figsize=(25, 10))
+plt.title('Hierarchical Clustering Dendrogram')
+plt.xlabel('sample index')
+plt.ylabel('distance')
+dendrogram(
+    hc,
+    leaf_rotation=90.,  # rotates the x axis labels
+    leaf_font_size=8.,  # font size for the x axis labels
+    leaf_label_func=llf
+)
+plt.show()

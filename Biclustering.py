@@ -81,6 +81,9 @@ count[where_are_NaNs] = 0
 where_are_infs = isinf(count)
 count[where_are_infs] = 0
 
+# Saving the count matrix in a CSV file
+np.savetxt("Count.csv", count, delimiter=",",fmt = '%d')
+
 
 #Set colors to each category
 def sec_to_col(argument):
@@ -243,3 +246,11 @@ nx.draw(G)
 hc = linkage(Distance, method='average')
 res = fcluster(hc, 2.5,'distance')
 print max(res)
+
+#Printing the members of each cluster
+for j in range(1,max(res)+1):
+    print "Cluster: ", j
+    for i in range(206):
+        if res[i] == j:
+            print botnet_set[i]
+

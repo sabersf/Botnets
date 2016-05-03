@@ -18,6 +18,7 @@ import matplotlib as ml
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 from collections import Counter
+from math import *
 
 from sklearn.datasets import make_checkerboard
 from sklearn.datasets import samples_generator as sg
@@ -182,3 +183,22 @@ plt.show()
 mean_bot = bot_mat.mean()
 mean_ent = ent_mat.mean()
 print mean_bot, mean_ent
+#Checking which bot-bot activies has the value greater
+# than the average attacks
+for i in range(bot_mat.shape[0]):
+    for j in range(bot_mat.shape[0]):
+        if i != j and bot_mat[i][j] > mean_bot:
+            print botnet_set[i],botnet_set[j], bot_mat[i][j]
+            
+#Plotting the Intensity vs attack number heatmap
+attack_intensity = np.zeros(shape=(17,5124))
+for i in range(206):
+    r = int(log(intensity[i]))
+    c = attack_num[i]
+    attack_intensity[r][c] += 1
+plt.pcolor(attack_intensity)
+plt.title('Intensity vs attack number heatmap')
+plt.axis([0, 5124, 0, 17])
+plt.colorbar()
+plt.show()
+    

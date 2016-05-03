@@ -176,3 +176,9 @@ plt.title("Number of attacks histogram")
 #plt.xlabel("Botnet #")
 #plt.ylabel("The number of entities it attacks")
 plt.show()
+
+#Calculating the mean number of attacks and entities
+# in the new matrix
+mean_bot = bot_mat.mean()
+mean_ent = ent_mat.mean()
+print mean_bot, mean_ent

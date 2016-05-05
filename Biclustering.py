@@ -196,17 +196,16 @@ def num_to_sec(argument):
     }
     return switcher.get(argument,23)
 #Set numbers to each size
-def size_to_num(argument):
+def num_to_size(argument):
     switcher = {
-		'0-100',
-		'100-1000',
-		'1000-10000',
-		'10000-50000',
-		'50000+',
-		'Unknown',
+		0:'0-100',
+		1:'100-1000',
+		2:'1000-10000',
+		3:'10000-50000',
+		4:'50000+',
+		5:'Unknown',
     }
-    return switcher.get(argument, 6)
-    
+    return switcher.get(argument, 6)    
 
 # Assigns the topics to the documents in corpus
 

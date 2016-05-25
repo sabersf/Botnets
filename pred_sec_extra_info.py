@@ -399,7 +399,7 @@ model.add(Activation('softmax'))
 model.summary()
 batch_size = 16
 nb_classes = 23
-nb_epoch = 3000
+nb_epoch = 1000
 
 try:
     #target = open("NN_out.txt", 'w')

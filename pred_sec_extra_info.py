@@ -383,14 +383,14 @@ model.add(Dense(64))
 model.add(Activation('tanh'))
 model.add(Dropout(0.05))
 
-#model.add(Dense(128))
-#model.add(Activation('tanh'))
-#model.add(Dropout(0.05))
+model.add(Dense(128))
+model.add(Activation('tanh'))
+model.add(Dropout(0.05))
 
 
-#model.add(Dense(32))
-#model.add(Activation('tanh'))
-#model.add(Dropout(0.05))
+model.add(Dense(32))
+model.add(Activation('tanh'))
+model.add(Dropout(0.05))
 
 
 model.add(Dense(23))
@@ -399,7 +399,7 @@ model.add(Activation('softmax'))
 model.summary()
 batch_size = 16
 nb_classes = 23
-nb_epoch = 500
+nb_epoch = 3000
 
 try:
     #target = open("NN_out.txt", 'w')

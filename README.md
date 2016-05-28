@@ -1,2 +1,2 @@
 # Botnets
-Analyzing the botnets using word2vec model
+Classifying Botnets using different machine learning methods

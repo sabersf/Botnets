@@ -276,63 +276,9 @@ out = np.array(output)
 X_train, X_test, Y_train, Y_test = train_test_split(inp, out, test_size=0.05, random_state=42)
 
 
-# In[92]:
-
-# Define a dnn using Tensorflow
-with tf.Graph().as_default() as session:
-
-    # Model variables
-    X = tf.placeholder("float", [None, len(X_train[0])])
-    Y = tf.placeholder("float", [None, len(Y_train[0])])
-
-    # Multilayer perceptron
-    def dnn(x):
-        with tf.variable_scope('Layer1'):
-            # Creating variable using TFLearn
-            W1 = va.variable(name='W', shape=[len(X_train[0]), 256],
-                             initializer='uniform_scaling',
-                             regularizer='L2')
-            b1 = va.variable(name='b', shape=[256])
-            x = tf.nn.tanh(tf.add(tf.matmul(x, W1), b1))
-
-        with tf.variable_scope('Layer2'):
-            W2 = va.variable(name='W', shape=[256, 64],
-                             initializer='uniform_scaling',
-                             regularizer='L2')
-            b2 = va.variable(name='b', shape=[64])
-            x = tf.nn.tanh(tf.add(tf.matmul(x, W2), b2))
-
-        with tf.variable_scope('Layer3'):
-            W3 = va.variable(name='W', shape=[64, 64],
-                             initializer='uniform_scaling',regularizer='L2')
-            b3 = va.variable(name='b', shape=[64])
-            x = tf.add(tf.matmul(x, W3), b3)
-
-        with tf.variable_scope('Layer4'):
-            W4 = va.variable(name='W', shape=[64, len(Y_train[0])],
-                             initializer='uniform_scaling',regularizer='L2')
-            b4 = va.variable(name='b', shape=[len(Y_train[0])])
-            x = tf.add(tf.matmul(x, W4), b4)
-            
-        return x,W4,b4
-
-    net, W4,b4 = dnn(X)
-    const = .01
-    loss = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(net, Y) + const*tf.nn.l2_loss(W4) +const*tf.nn.l2_loss(b4) )
-    #optimizer = tf.train.AdadeltaOptimizer(learning_rate=0.1)
-    optimizer = tf.train.GradientDescentOptimizer(learning_rate=0.001)
-    
-    accuracy = tf.reduce_mean(tf.cast(tf.equal(tf.argmax(net, 1), tf.argmax(Y, 1)), tf.float32), name='acc')
+# In[ ]:
 
 
-    trainop = tflearn.TrainOp(loss=loss, optimizer=optimizer, metric=accuracy, batch_size=256)
-
-    trainer = tflearn.Trainer(train_ops=trainop, tensorboard_verbose=3, tensorboard_dir='/tmp/tflearn_logs/')
-
-    trainer.fit({X: X_train, Y: Y_train}, val_feed_dicts={X: X_test, Y: Y_test},
-                n_epoch=100, show_metric=True, run_id='Variables_example')
-    print("Accuracy on the test test: %.2f"% (100. * trainer.session.run(accuracy, feed_dict={X:X_test, Y:Y_test})))
-    pred = trainer.session.run(tf.argmax(Y, 1),feed_dict={X:X_test, Y:Y_test})
 
 
 # In[93]:
@@ -361,64 +307,19 @@ for i in range(23):
 
 
 
-# In[35]:
-
-#Implementation with TFLEARN
-tf.reset_default_graph()
-tflearn.init_graph(num_cores=8, gpu_memory_fraction=0.8)
-tnorm = tflearn.initializations.uniform(minval=-1.0, maxval=1.0)
-
-# Building DNN
-nn = tflearn.input_data(shape=[None, len(X_train[0])])
-Input = nn
-nn = tflearn.fully_connected(nn, 256, activation='elu', weights_init=tnorm, name = "layer_1")
-nn = tflearn.dropout(nn, 0.5)
-nn = tflearn.fully_connected(nn, 512, activation='elu', weights_init=tnorm, name = "layer_2")
-nn = tflearn.dropout(nn, 0.5)
-nn = tflearn.fully_connected(nn, 512, activation='elu', weights_init=tnorm, name = "layer_3")
-nn = tflearn.dropout(nn, 0.5)
-nn = tflearn.fully_connected(nn, 256, activation='elu', weights_init=tnorm, name = "layer_4")
-nn = tflearn.dropout(nn, 0.5)
-nn = tflearn.fully_connected(nn, 64, activation='elu', weights_init=tnorm, name = "layer_5")
-nn = tflearn.dropout(nn, 0.5)
-Hidden_state = nn
-nn = tflearn.fully_connected(nn, len(Y_train[0]), activation='elu', weights_init=tnorm, name = "layer_6")
-Output = nn    
-#custom_loss = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(
-#    out_layer, tf_train_labels) +
-#    0.01*tf.nn.l2_loss(hidden_weights) +
-#    0.01*tf.nn.l2_loss(hidden_biases) +
-#    0.01*tf.nn.l2_loss(out_weights) +
-#    0.01*tf.nn.l2_loss(out_biases))
+# In[ ]:
 
 
-# Regression, with mean square error
-net = tflearn.regression(nn, optimizer='SGD' , learning_rate=0.001, loss ='categorical_crossentropy', metric=None)
-
-# Training the auto encoder
-model = tflearn.DNN(net, tensorboard_verbose=3)
-model.fit( X_train,  Y_train, n_epoch=20, validation_set=0.1, run_id="bitsight_nn", batch_size=128)
 
 
 # In[36]:
 
-pred = model.predict(X_test)
 
 
-# In[65]:
 
-total = 0
-correct = 0
-count_pred = np.zeros((23))
+# In[ ]:
 
-for i in range(len(pred)):
-    total += 1
-    count_pred[np.argmax(pred[i])] += 1
-    if np.argmax(pred[i]) == np.argmax(Y_test[i]):
-        correct += 1
-print(total, correct)
-for i in range(23):
-    print("Sector: %s number of predictions: %.0f"%(num_to_sec(i), count_pred[i]))
+
 
 
 # In[ ]:
@@ -428,10 +329,207 @@ for i in range(23):
 
 # In[61]:
 
-256, 128 , 64, const = 0.01 , result = Accuracy on the test test: 7.25, var = 45.52
-256, 128 , 64, const = 0.10 , result = Accuracy on the test test: 13.04
-256, 128 , 64, const = 1.00 , result = Accuracy on the test test: 
-256, 128 , 64, const = 100.0 , result = Accuracy on the test test: 7.25, var = 45.52
+#256, 128 , 64, const = 0.01 , result = Accuracy on the test test: 7.25, var = 45.52
+#256, 128 , 64, const = 0.10 , result = Accuracy on the test test: 13.04
+#256, 128 , 64, const = 1.00 , result = Accuracy on the test test: 
+#256, 128 , 64, const = 100.0 , result = Accuracy on the test test: 7.25, var = 45.52
+
+
+
+# In[99]:
+
+#Return all activities regarding that sector
+def sector_columns(inp_sector):
+    inp = []
+    for i in range(5916):
+        if sec_to_num(sector[EID_set[i]]) == inp_sector:
+            inp.append(count[:,i])
+    return inp
+
+
+# In[162]:
+
+#Getting the input for botnet attacks on the two different sector numbers
+def create_inp_two_sectors(first, second):
+    #first sector and the second sector
+    first_ent = sector_columns(first)
+    second_ent = sector_columns(second)
+    #we have to keep track of the items we picked so we don't pick them again
+    first_flag = [False for i in range(len(first_ent))]
+    second_flag = [False for i in range(len(second_ent))]
+    #Min number of items we have for both entities
+    #We want to pick the same number from both sectors
+    min_num = min(len(first_ent), len(second_ent))
+    #keep count on the number of items we picked from each sector
+    count_first = 0
+    count_second = 0
+    #Input and output for the DNN algorithms we wanna use later
+    Y = []
+    X = []
+    #Continue this loop until we have the same number from both sectors
+    while (count_first + count_second)  < (min_num*2):
+        #pick a random sector: first or second
+        priority = random.randint(0,1)
+        if priority == 0:
+            #The first sector it is! we have to set Y to 0
+            if count_first >= min_num:
+                continue
+            else:
+                found = False
+                while(found == False):
+                    i = random.randint(0,len(first_ent) - 1)
+                    if first_flag[i] == False:
+                        found = True
+                        first_flag[i] = True
+                        X.append(first_ent[i])
+                Y.append([0])
+                count_first += 1
+        else:
+            #The second sector is picked! We have to set Y to 1
+            if count_second >= min_num:
+                continue
+            else:
+                found = False
+                while(found == False):
+                    i = random.randint(0,len(second_ent) - 1)
+                    if second_flag[i] == False:
+                        found = True
+                        second_flag[i] = True
+                        X.append(second_ent[i])
+                Y.append([1])
+                count_second += 1
+    X = np.array(X)
+    Y = np.array(Y)
+    return train_test_split(X, Y, test_size=0.1, random_state=42)
+
+
+# In[180]:
+
+#Define a dnn model using TFlearn
+def deep_net_tflearn(X_train,X_test,Y_train,Y_test, num_epoch, first_layer, second_layer, third_layer,fourth_layer):
+    #Implementation with TFLEARN
+    tf.reset_default_graph()
+    tflearn.init_graph(num_cores=8, gpu_memory_fraction=0.8)
+    tnorm = tflearn.initializations.uniform(minval=-1.0, maxval=1.0)
+
+    # Building DNN
+    nn = tflearn.input_data(shape=[None, len(X_train[0])])
+    Input = nn
+    nn = tflearn.fully_connected(nn, first_layer, activation='elu', regularizer='L2', weights_init=tnorm, name = "layer_1")
+    nn = tflearn.dropout(nn, 0.5)
+    nn = tflearn.fully_connected(nn, second_layer, activation='elu', regularizer='L2', weights_init=tnorm, name = "layer_2")
+    nn = tflearn.dropout(nn, 0.5)
+    nn = tflearn.fully_connected(nn, third_layer, activation='elu', regularizer='L2', weights_init=tnorm, name = "layer_3")
+    nn = tflearn.dropout(nn, 0.5)
+    nn = tflearn.fully_connected(nn, fourth_layer, activation='elu', regularizer='L2', weights_init=tnorm, name = "layer_4")
+    nn = tflearn.dropout(nn, 0.5)
+    Hidden_state = nn
+    nn = tflearn.fully_connected(nn, len(Y_train[0]), activation='elu', weights_init=tnorm, name = "layer_5")
+    Output = nn    
+    #custom_loss = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(
+    #    out_layer, tf_train_labels) +
+    #    0.01*tf.nn.l2_loss(hidden_weights) +
+    #    0.01*tf.nn.l2_loss(hidden_biases) +
+    #    0.01*tf.nn.l2_loss(out_weights) +
+    #    0.01*tf.nn.l2_loss(out_biases))
+
+
+    # Regression, with mean square error
+    net = tflearn.regression(nn, optimizer='SGD' , learning_rate=0.001, loss ='categorical_crossentropy', metric=None)
+
+    # Training the auto encoder
+    model = tflearn.DNN(net, tensorboard_verbose=3)
+    model.fit( X_train,  Y_train, n_epoch = num_epoch, validation_set=0.1, run_id="bitsight_nn_tflearn", batch_size=128)
+    pred = model.predict(X_test)
+    total = 0
+    correct = 0
+
+    for i in range(len(pred)):
+        total += 1
+        if np.argmax(pred[i]) == np.argmax(Y_test[i]):
+            correct += 1
+    return total*1., correct*1.
+
+
+# In[164]:
+
+# Define a dnn using Tensorflow
+def deep_net_tf(X_train,X_test,Y_train,Y_test, first_layer, second_layer, third_layer):
+    with tf.Graph().as_default() as session:
+
+        # Model variables
+        X = tf.placeholder("float", [None, len(X_train[0])])
+        Y = tf.placeholder("float", [None, len(Y_train[0])])
+
+        # Multilayer perceptron
+        def dnn(x):
+            with tf.variable_scope('Layer1'):
+                # Creating variable using TFLearn
+                W1 = va.variable(name='W', shape=[len(X_train[0]), first_layer],
+                                 initializer='uniform_scaling',
+                                 regularizer='L2')
+                b1 = va.variable(name='b', shape=[first_layer])
+                x = tf.nn.tanh(tf.add(tf.matmul(x, W1), b1))
+
+            with tf.variable_scope('Layer2'):
+                W2 = va.variable(name='W', shape=[first_layer, second_layer],
+                                 initializer='uniform_scaling',
+                                 regularizer='L2')
+                b2 = va.variable(name='b', shape=[second_layer])
+                x = tf.nn.tanh(tf.add(tf.matmul(x, W2), b2))
+
+            with tf.variable_scope('Layer3'):
+                W3 = va.variable(name='W', shape=[second_layer, third_layer],
+                                 initializer='uniform_scaling',regularizer='L2')
+                b3 = va.variable(name='b', shape=[third_layer])
+                x = tf.add(tf.matmul(x, W3), b3)
+
+            with tf.variable_scope('Layer4'):
+                W4 = va.variable(name='W', shape=[third_layer, len(Y_train[0])],
+                                 initializer='uniform_scaling',regularizer='L2')
+                b4 = va.variable(name='b', shape=[len(Y_train[0])])
+                x = tf.add(tf.matmul(x, W4), b4)
+
+            return x,W4,b4
+
+        net, W4 , b4 = dnn(X)
+        const = .01
+        loss = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(net, Y) + const*tf.nn.l2_loss(W4) +const*tf.nn.l2_loss(b4) )
+        #optimizer = tf.train.AdadeltaOptimizer(learning_rate=0.1)
+        optimizer = tf.train.GradientDescentOptimizer(learning_rate=0.001)
+
+        accuracy = tf.reduce_mean(tf.cast(tf.equal(tf.argmax(net, 1), tf.argmax(Y, 1)), tf.float32), name='acc')
+
+
+        trainop = tflearn.TrainOp(loss=loss, optimizer=optimizer, metric=accuracy, batch_size=256)
+
+        trainer = tflearn.Trainer(train_ops=trainop, tensorboard_verbose=3, tensorboard_dir='/tmp/tflearn_logs/')
+
+        trainer.fit({X: X_train, Y: Y_train}, val_feed_dicts={X: X_test, Y: Y_test},
+                    n_epoch=100, show_metric=True, run_id='Variables_example')
+        print("Accuracy on the test test: %.2f"% (100. * trainer.session.run(accuracy, feed_dict={X:X_test, Y:Y_test})))
+        pred = trainer.session.run(tf.argmax(Y, 1),feed_dict={X:X_test, Y:Y_test})
+
+
+# In[182]:
+
+#Train a deep neural net to distinguish between two entities
+def classify(first, second):
+    X_train, X_test, Y_train, Y_test = create_inp_two_sectors(first, second)
+    total, correct = deep_net_tflearn(X_train, X_test, Y_train, Y_test,10, 256,128,64,32)
+    return total, correct
+
+
+# In[ ]:
+
+for i in range(23):
+    for j in range(23):
+        t, c = classify(i,j)
+        print("The results of classification between the section %s and %s is %.2f" %(num_to_sec(i),num_to_sec(j) , 100.*c/t))
+
+
+# In[ ]:
+
 
 
 
